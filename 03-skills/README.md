@@ -784,6 +784,14 @@ chmod +x ~/.claude/skills/my-skill/scripts/*.py
 
 Package skills in a plugin's `skills/` directory for broader distribution.
 
+## Going Further: A Skill Collection and a Skill Manager
+
+Once you start building skills seriously, two things become essential: a library of proven skills and a tool to manage them.
+
+**[luongnv89/skills](https://github.com/luongnv89/skills)** — A collection of skills I use daily across almost all my projects. Highlights include `logo-designer` (generates project logos on the fly) and `ollama-optimizer` (tunes local LLM performance for your hardware). Great starting point if you want ready-to-use skills.
+
+**[luongnv89/asm](https://github.com/luongnv89/asm)** — Agent Skill Manager. Handles skill development, duplicate detection, and testing. The `asm link` command lets you test a skill in any project without copying files around — essential once you have more than a handful of skills.
+
 ## Additional Resources
 
 - [Official Skills Documentation](https://code.claude.com/docs/en/skills)
