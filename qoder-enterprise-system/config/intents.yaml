@@ -1,0 +1,308 @@
+# Intent Routing Configuration
+# Maps user inputs to corresponding specs
+# Version: 1.0.0
+
+version: "1.0.0"
+
+# Intent Definitions
+intents:
+  # Code Quality & Review
+  - id: "code-review"
+    name: "Code Review"
+    description: "Comprehensive code review including security, performance, and quality"
+    category: "quality"
+    priority: 1
+    spec_path: "specs/skills/code-review.md"
+    
+    patterns:
+      - type: "exact"
+        value: "code review"
+        weight: 1.0
+      - type: "exact"
+        value: "review code"
+        weight: 1.0
+      - type: "regex"
+        value: "проверь(те)?\s+(код|этот)"
+        weight: 0.95
+      - type: "regex"
+        value: "review\s+(this|the)\s+code"
+        weight: 0.95
+      - type: "semantic"
+        value: "code analysis security check quality review"
+        weight: 0.8
+      - type: "fuzzy"
+        value: "review"
+        weight: 0.6
+        
+    context_requirements:
+      - "code_selection"
+      - "current_file"
+      
+    confidence_threshold: 0.8
+
+  - id: "security-audit"
+    name: "Security Audit"
+    description: "Security-focused code analysis"
+    category: "quality"
+    priority: 2
+    spec_path: "specs/agents/security-reviewer.md"
+    
+    patterns:
+      - type: "exact"
+        value: "security audit"
+        weight: 1.0
+      - type: "exact"
+        value: "security check"
+        weight: 1.0
+      - type: "regex"
+        value: "(найди|check|scan)\s+(for\s+)?(уязвимости|vulnerabilities|security)"
+        weight: 0.9
+      - type: "semantic"
+        value: "security vulnerability injection xss auth"
+        weight: 0.85
+        
+    confidence_threshold: 0.85
+
+  - id: "performance-optimization"
+    name: "Performance Optimization"
+    description: "Analyze and optimize code performance"
+    category: "quality"
+    priority: 2
+    spec_path: "specs/skills/performance-optimization.md"
+    
+    patterns:
+      - type: "exact"
+        value: "optimize"
+        weight: 1.0
+      - type: "exact"
+        value: "performance"
+        weight: 0.95
+      - type: "regex"
+        value: "(оптимизируй|ускорь|optimize|speed\s+up)"
+        weight: 0.9
+      - type: "regex"
+        value: "(bottleneck|slow|inefficient|memory\s+leak)"
+        weight: 0.85
+      - type: "semantic"
+        value: "performance optimization speed memory efficiency"
+        weight: 0.8
+        
+    confidence_threshold: 0.8
+
+  # Documentation
+  - id: "generate-documentation"
+    name: "Generate Documentation"
+    description: "Generate API docs, README, or inline documentation"
+    category: "documentation"
+    priority: 1
+    spec_path: "specs/skills/documentation-generation.md"
+    
+    patterns:
+      - type: "exact"
+        value: "generate docs"
+        weight: 1.0
+      - type: "exact"
+        value: "create documentation"
+        weight: 1.0
+      - type: "regex"
+        value: "(сгенерируй|create|generate)\s+(документацию|docs|documentation)"
+        weight: 0.95
+      - type: "regex"
+        value: "(напиши|write)\s+(readme|api\s+docs)"
+        weight: 0.9
+      - type: "semantic"
+        value: "documentation generate api readme inline comments"
+        weight: 0.8
+        
+    confidence_threshold: 0.75
+
+  # Testing
+  - id: "generate-tests"
+    name: "Generate Tests"
+    description: "Generate unit tests, integration tests, or test coverage analysis"
+    category: "testing"
+    priority: 1
+    spec_path: "specs/skills/test-generation.md"
+    
+    patterns:
+      - type: "exact"
+        value: "generate tests"
+        weight: 1.0
+      - type: "exact"
+        value: "test coverage"
+        weight: 0.95
+      - type: "regex"
+        value: "(создай|generate|write)\s+(тесты|tests|test\s+cases)"
+        weight: 0.9
+      - type: "regex"
+        value: "(покрытие|coverage)\s+(тестами|tests)"
+        weight: 0.85
+      - type: "semantic"
+        value: "testing unit integration coverage jest mocha"
+        weight: 0.8
+        
+    confidence_threshold: 0.75
+
+  # Refactoring
+  - id: "refactor-code"
+    name: "Refactor Code"
+    description: "Systematic code refactoring with complexity analysis"
+    category: "maintenance"
+    priority: 2
+    spec_path: "specs/skills/refactoring.md"
+    
+    patterns:
+      - type: "exact"
+        value: "refactor"
+        weight: 1.0
+      - type: "regex"
+        value: "(рефакторинг|refactor|restructure|rewrite)"
+        weight: 0.9
+      - type: "semantic"
+        value: "refactoring clean code complexity smells"
+        weight: 0.8
+        
+    confidence_threshold: 0.8
+
+  # Development Tasks
+  - id: "create-pull-request"
+    name: "Create Pull Request"
+    description: "Prepare comprehensive PR with description and checklist"
+    category: "workflow"
+    priority: 1
+    spec_path: "specs/tasks/create-pull-request.md"
+    
+    patterns:
+      - type: "exact"
+        value: "create PR"
+        weight: 1.0
+      - type: "exact"
+        value: "pull request"
+        weight: 0.95
+      - type: "regex"
+        value: "(создай|create|prepare)\s+(PR|pull\s+request)"
+        weight: 0.9
+      - type: "regex"
+        value: "(опиши|describe)\s+(изменения|changes)"
+        weight: 0.8
+        
+    confidence_threshold: 0.75
+
+  - id: "setup-ci-cd"
+    name: "Setup CI/CD"
+    description: "Setup continuous integration and deployment pipelines"
+    category: "devops"
+    priority: 2
+    spec_path: "specs/tasks/setup-ci-cd.md"
+    
+    patterns:
+      - type: "exact"
+        value: "setup CI/CD"
+        weight: 1.0
+      - type: "regex"
+        value: "(настрой|setup|configure)\s+(CI|CD|ci/cd|pipeline)"
+        weight: 0.9
+      - type: "semantic"
+        value: "ci cd pipeline github gitlab actions workflow"
+        weight: 0.8
+        
+    confidence_threshold: 0.8
+
+  # System Operations
+  - id: "create-checkpoint"
+    name: "Create Checkpoint"
+    description: "Create git-based checkpoint for safe experimentation"
+    category: "system"
+    priority: 0
+    spec_path: "specs/system/checkpoint-manager.md"
+    
+    patterns:
+      - type: "exact"
+        value: "checkpoint"
+        weight: 1.0
+      - type: "exact"
+        value: "save state"
+        weight: 0.95
+      - type: "regex"
+        value: "(создай|create|save)\s+(чекпоинт|checkpoint|snapshot)"
+        weight: 0.9
+      - type: "regex"
+        value: "(сохрани|backup)\s+(состояние|state)"
+        weight: 0.85
+        
+    confidence_threshold: 0.7
+
+  - id: "run-hooks"
+    name: "Run Hooks"
+    description: "Execute automation hooks manually"
+    category: "system"
+    priority: 0
+    spec_path: "specs/system/hook-automation.md"
+    
+    patterns:
+      - type: "exact"
+        value: "run hooks"
+        weight: 1.0
+      - type: "regex"
+        value: "(запусти|run|execute)\s+(хуки|hooks|automation)"
+        weight: 0.9
+      - type: "regex"
+        value: "(pre-commit|post-commit|pre-push)\s+(check|hook)"
+        weight: 0.85
+        
+    confidence_threshold: 0.75
+
+# Routing Configuration
+routing:
+  strategy: "best_match"
+  fallback_enabled: true
+  fallback_suggestions_count: 3
+  
+  # Multi-intent handling
+  multi_intent:
+    enabled: true
+    delimiter_patterns:
+      - " and then "
+      - ", then "
+      - " followed by "
+      - " | "
+      - "; "
+      
+  # Context-aware routing
+  context_aware:
+    enabled: true
+    boost_factors:
+      current_file_extension: 0.1
+      selected_code: 0.15
+      previous_intent: 0.2
+
+# Validation
+validation:
+  enabled: true
+  validate_specs_on_load: true
+  validate_on_route: false
+  
+  schema:
+    required_fields:
+      - "id"
+      - "name"
+      - "spec_path"
+      - "patterns"
+    
+    pattern_types:
+      - "exact"
+      - "regex"
+      - "semantic"
+      - "fuzzy"
+
+# Monitoring
+monitoring:
+  enabled: true
+  log_unmatched: true
+  track_performance: true
+  
+  metrics:
+    - "intent_detection_time"
+    - "confidence_scores"
+    - "cache_hit_rate"
+    - "fallback_rate"

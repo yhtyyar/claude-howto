@@ -1,0 +1,76 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema.json",
+  "name": "qoder-enterprise-mcp",
+  "version": "1.0.0",
+  "description": "Enterprise MCP servers for Qoder IDE - Intent Router, Checkpoint Manager, and Hook Runner",
+  "servers": {
+    "qoder-intent-router": {
+      "command": "node",
+      "args": [
+"${PROJECT_ROOT}/core/mcp-intent-router/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "QODER_SPECS_PATH": "${PROJECT_ROOT}/specs",
+        "QODER_LOG_LEVEL": "info",
+        "QODER_CACHE_ENABLED": "true",
+        "QODER_CACHE_TTL": "300"
+      },
+      "disabled": false,
+      "alwaysAllow": [
+        "detect_intent",
+        "list_intents",
+        "get_spec",
+        "reload_specs"
+      ]
+    },
+    "qoder-checkpoint": {
+      "command": "node",
+      "args": [
+"${PROJECT_ROOT}/core/mcp-checkpoint-manager/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "QODER_GIT_AUTO_COMMIT": "true",
+        "QODER_CHECKPOINT_PREFIX": "[qoder-chk]",
+        "QODER_METADATA_DIR": ".qoder/checkpoints",
+        "QODER_LOG_LEVEL": "info"
+      },
+      "disabled": false,
+      "alwaysAllow": [
+        "create_checkpoint",
+        "restore_checkpoint",
+        "list_checkpoints",
+        "delete_checkpoint",
+        "diff_checkpoints",
+        "get_checkpoint_metadata"
+      ]
+    },
+    "qoder-hooks": {
+      "command": "node",
+      "args": [
+"${PROJECT_ROOT}/core/mcp-hook-runner/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "QODER_HOOKS_PATH": "${PROJECT_ROOT}/workflows",
+        "QODER_LOG_LEVEL": "info",
+        "QODER_PARALLEL_EXECUTION": "true",
+        "QODER_MAX_CONCURRENT": "4"
+      },
+      "disabled": false,
+      "alwaysAllow": [
+        "run_hook",
+        "list_hooks",
+        "validate_workflow",
+        "get_hook_status"
+      ]
+    }
+  },
+  "metadata": {
+    "created": "2026-04-09",
+    "author": "CTO Architecture Team",
+    "license": "MIT",
+    "repository": "https://github.com/enterprise/qoder-system"
+  }
+}

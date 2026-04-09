@@ -1,0 +1,145 @@
+# Qoder Enterprise System Configuration
+# Version: 1.0.0
+# Last Updated: 2026-04-09
+
+system:
+  name: "qoder-enterprise-system"
+  version: "1.0.0"
+  environment: "production"
+  
+  # Core paths configuration
+  paths:
+    specs: "./specs"
+    workflows: "./workflows"
+    checkpoints: "./.qoder/checkpoints"
+    context: "./.qoder/context"
+    logs: "./.qoder/logs"
+  
+  # Logging configuration
+  logging:
+    level: "info"  # debug, info, warn, error
+    format: "json"  # json, text
+    output: "file"  # file, console, both
+    file: "./.qoder/logs/system.log"
+    max_size: "10MB"
+    max_files: 5
+
+# Intent Router Configuration
+intent_router:
+  enabled: true
+  
+  # Pattern matching configuration
+  matching:
+    strategy: "best_match"  # best_match, first_match, multi_match
+    confidence_threshold: 0.8
+    fuzzy_threshold: 0.6
+    
+  # Caching configuration
+  cache:
+    enabled: true
+    ttl: 300  # seconds
+    max_size: 1000  # number of cached intents
+    
+  # Fallback behavior
+  fallback:
+    enabled: true
+    suggest_top_n: 3
+    generic_assistant: true
+
+# Checkpoint Manager Configuration
+checkpoint:
+  enabled: true
+  
+  # Git integration
+  git:
+    auto_commit: true
+    commit_prefix: "[qoder-chk]"
+    stash_changes: true
+    
+  # Metadata storage
+  metadata:
+    format: "json"
+    compression: false
+    encryption: false
+    
+  # Retention policy
+  retention:
+    enabled: true
+    max_age_days: 30
+    max_count: 100
+    auto_cleanup: true
+
+# Hook Runner Configuration
+hooks:
+  enabled: true
+  
+  # Execution configuration
+  execution:
+    parallel: true
+    max_concurrent: 4
+    timeout: 300  # seconds per step
+    fail_fast: false  # stop on first error
+    
+  # Supported hook types
+  supported_hooks:
+    - "pre-commit"
+    - "post-commit"
+    - "pre-push"
+    - "post-push"
+    - "pre-merge"
+    - "post-merge"
+    - "pre-rebase"
+    - "manual"
+
+# Security Configuration
+security:
+  # Execution policies
+  allowed_commands:
+    - "npm"
+    - "yarn"
+    - "pnpm"
+    - "git"
+    - "node"
+    - "python"
+    - "python3"
+    - "bash"
+    - "sh"
+    - "echo"
+    - "cat"
+    - "grep"
+    - "find"
+    
+  blocked_patterns:
+    - "rm -rf /"
+    - ">/dev/null"
+    - "curl.*|.*sh"
+    - "wget.*|.*sh"
+    
+  # MCP server security
+  mcp:
+    validate_servers: true
+    sandbox_execution: false
+    max_execution_time: 300
+
+# Feature Flags
+features:
+  intent_router: true
+  checkpoint_manager: true
+  hook_runner: true
+  context_preservation: true
+  spec_validation: true
+  auto_discovery: true
+
+# Integration Settings
+integrations:
+  git:
+    enabled: true
+    require_clean_worktree: false
+    
+  qoder_ide:
+    version: "1.0.0+"
+    features:
+      - "chat_mode"
+      - "agent_mode"
+      - "quest_mode"
+      - "expert_panel"

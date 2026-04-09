@@ -1,0 +1,61 @@
+{
+  "name": "qoder-enterprise-system",
+  "version": "1.0.0",
+  "description": "Enterprise-grade adaptation of claude-howto patterns for Qoder IDE",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "install:all": "npm ci && npm run build:all",
+    "build:all": "npm run build:intent && npm run build:checkpoint && npm run build:hooks",
+    "build:intent": "cd core/mcp-intent-router && npm ci && npm run build",
+    "build:checkpoint": "cd core/mcp-checkpoint-manager && npm ci && npm run build",
+    "build:hooks": "cd core/mcp-hook-runner && npm ci && npm run build",
+    "test": "npm run test:all",
+    "test:all": "npm run test:intent && npm run test:checkpoint && npm run test:hooks",
+    "test:intent": "cd core/mcp-intent-router && npm test",
+    "test:checkpoint": "cd core/mcp-checkpoint-manager && npm test",
+    "test:hooks": "cd core/mcp-hook-runner && npm test",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "validate:specs": "node scripts/validate-specs.js",
+    "setup": "bash scripts/install.sh",
+    "clean": "rm -rf core/*/dist core/*/node_modules node_modules",
+    "dev:intent": "cd core/mcp-intent-router && npm run dev",
+    "dev:checkpoint": "cd core/mcp-checkpoint-manager && npm run dev",
+    "dev:hooks": "cd core/mcp-hook-runner && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enterprise/qoder-system.git"
+  },
+  "keywords": [
+    "qoder",
+    "mcp",
+    "ai-agents",
+    "code-assistant",
+    "intent-router",
+    "checkpoints",
+    "hooks",
+    "enterprise"
+  ],
+  "author": "CTO Architecture Team <arch-team@company.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "zod": "^3.22.4"
+  }
+}
