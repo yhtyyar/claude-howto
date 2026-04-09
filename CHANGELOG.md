@@ -1,5 +1,50 @@
 # Changelog
 
+## v2.3.0 — 2026-04-07
+
+### Features
+
+- build and publish EPUB artifacts per language (90e9c30) @Thiên Toán
+- add missing pre-tool-check.sh hook to 06-hooks (b511ed1) @JiayuWang
+- add Chinese translations in zh/ directory (89e89d4) @Luong NGUYEN
+- Add performance-optimizer subagent and dependency-check hook (f53d080) @qk
+
+### Bug Fixes
+
+- Windows Git Bash compatibility + stdin JSON protocol (2cbb10c) @Luong NGUYEN
+- correct autoCheckpoint config documentation in 08-checkpoints (749c79f) @JiayuWang
+- embed SVG images instead of replacing with placeholders (1b16709) @Thiên Toán
+- nested code fence rendering in memory README (ce24423) @Zhaoshan Duan
+- apply review fixes dropped by squash merge (34259ca) @Luong NGUYEN
+- make hook scripts compatible with Windows Git Bash and use stdin JSON protocol (107153d) @binyu li
+
+### Documentation
+
+- sync all tutorials with latest Claude Code docs (April 2026) (72d3b01) @Luong NGUYEN
+- add Chinese language link to language switcher (6cbaa4d) @Luong NGUYEN
+- add language switcher between English and Vietnamese (100c45e) @Luong NGUYEN
+- add GitHub #1 Trending badge (0ca8c37) @Luong NGUYEN
+- Introduce cc-context-stats for context zone monitoring (d41b335) @Luong NGUYEN
+- Introduce luongnv89/skills collection and luongnv89/asm skill manager (7e3c0b6) @Luong NGUYEN
+- Update README stats to reflect current GitHub metrics (5,900+ stars, 690+ forks) (5001525) @Luong NGUYEN
+- Update README stats to reflect current GitHub metrics (3,900+ stars, 460+ forks) (9cb92d6) @Luong NGUYEN
+
+### Refactoring
+
+- replace Kroki HTTP dependency with local mmdc rendering (e76bbe4) @Luong NGUYEN
+- shift quality checks to pre-commit, CI as 2nd pass (6d1e0ae) @Luong NGUYEN
+- narrow auto-mode permissions baseline (2790fb2) @Luong NGUYEN
+- Replace auto-adapt hook with one-time permissions setup script (995a5d6) @Luong NGUYEN
+
+### Other
+
+- shift-left quality gates — add mypy to pre-commit, fix CI failures (699fb39) @Luong NGUYEN
+- Add Vietnamese (Tiếng Việt) Localization (a70777e) @Thiên Toán
+
+**Full Changelog**: https://github.com/luongnv89/claude-howto/compare/v2.2.0...v2.3.0
+
+---
+
 ## v2.2.0 — 2026-03-26
 
 ### Documentation

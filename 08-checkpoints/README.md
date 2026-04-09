@@ -50,8 +50,10 @@ When you rewind, you are presented with a menu of five options:
 1. **Restore code and conversation** -- Revert both files and messages to that checkpoint
 2. **Restore conversation** -- Rewind messages only, keep your current code as-is
 3. **Restore code** -- Revert file changes only, keep the full conversation history
-4. **Summarize from here** -- Compress the conversation from this point forward into an AI-generated summary instead of discarding it. The original messages are preserved in the transcript. You can optionally provide instructions to focus the summary on specific topics.
+4. **Summarize from here** -- Compress the conversation from this point forward into an AI-generated summary, freeing context window space. Messages before the selected point stay intact. No files on disk are changed. The original messages are preserved in the session transcript. You can optionally provide instructions to focus the summary on specific topics.
 5. **Never mind** -- Cancel and return to the current state
+
+> **Note**: After restoring the conversation or summarizing, the original prompt from the selected message is restored into the input field so you can re-send or edit it.
 
 ## Automatic Checkpoints
 
@@ -207,15 +209,17 @@ Since checkpoints are created automatically, you can focus on your work without 
 
 ## Configuration
 
-You can toggle automatic checkpoints in your settings:
+Checkpoints are a built-in default behavior in Claude Code and do not require any configuration to enable. Every user prompt automatically creates a checkpoint.
+
+The only checkpoint-related setting is `cleanupPeriodDays`, which controls how long sessions and checkpoints are retained:
 
 ```json
 {
-  "autoCheckpoint": true
+  "cleanupPeriodDays": 30
 }
 ```
 
-- `autoCheckpoint`: Enable or disable automatic checkpoint creation on every user prompt (default: `true`)
+- `cleanupPeriodDays`: Number of days to retain session history and checkpoints (default: `30`)
 
 ## Limitations
 
@@ -233,8 +237,8 @@ Checkpoints have the following limitations:
 
 **Solution**:
 - Check if checkpoints were cleared
-- Verify that `autoCheckpoint` is enabled in your settings
 - Check disk space
+- Ensure `cleanupPeriodDays` is set high enough (default: 30 days)
 
 ### Rewind Failed
 
@@ -309,3 +313,8 @@ Key benefits:
 - Integrate safely with version control systems
 
 Remember: checkpoints are not a replacement for git. Use checkpoints for rapid experimentation and git for permanent code changes.
+
+---
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.1.97
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5

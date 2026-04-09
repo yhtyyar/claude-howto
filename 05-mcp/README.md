@@ -105,14 +105,6 @@ Server-Sent Events transport is deprecated in favor of `http` but still supporte
 claude mcp add --transport sse legacy-server https://example.com/sse
 ```
 
-### WebSocket Transport
-
-WebSocket transport for persistent bidirectional connections:
-
-```bash
-claude mcp add --transport ws realtime-server wss://example.com/mcp
-```
-
 ### Windows-Specific Note
 
 On native Windows (not WSL), use `cmd /c` for npx commands:
@@ -216,6 +208,10 @@ When MCP tool descriptions exceed 10% of the context window, Claude Code automat
 ## Dynamic Tool Updates
 
 Claude Code supports MCP `list_changed` notifications. When an MCP server dynamically adds, removes, or modifies its available tools, Claude Code receives the update and adjusts its tool list automatically -- no reconnection or restart required.
+
+## MCP Apps
+
+MCP Apps is the first official MCP extension, enabling MCP tool calls to return interactive UI components that render directly in the chat interface. Instead of plain text responses, MCP servers can deliver rich dashboards, forms, data visualizations, and multi-step workflows -- all displayed inline without leaving the conversation.
 
 ## MCP Elicitation
 
@@ -1110,3 +1106,8 @@ export GITHUB_TOKEN="your_token"
 - [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) — Anthropic's engineering blog on solving context bloat
 - [Claude Code CLI Reference](https://code.claude.com/docs/en/cli-reference)
 - [Claude API Documentation](https://docs.anthropic.com)
+
+---
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.1.97
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5

@@ -16,7 +16,7 @@ A comprehensive reference guide covering Slash Commands, Subagents, Memory, MCP 
 3. [Memory](#memory)
 4. [MCP Protocol](#mcp-protocol)
 5. [Agent Skills](#agent-skills)
-6. [Plugins](#plugins)
+6. [Plugins](#claude-code-plugins)
 7. [Hooks](#hooks)
 8. [Checkpoints and Rewind](#checkpoints-and-rewind)
 9. [Advanced Features](#advanced-features)
@@ -1754,7 +1754,6 @@ usersWithPosts.forEach(({ user, posts }) => {
 
 - [N+1 Query Problem](https://en.wikipedia.org/wiki/N%2B1_problem)
 - [Database Join Documentation](https://docs.example.com/joins)
-- [Performance Optimization Guide](./docs/performance.md)
 
 ### Reviewer Notes
 
@@ -3127,6 +3126,10 @@ Complete configuration example:
 
 ---
 
-*Last updated: March 2026*
+*Last updated: April 2026*
 *For Claude Haiku 4.5, Sonnet 4.6, and Opus 4.6*
 *Now includes: Hooks, Checkpoints, Planning Mode, Extended Thinking, Background Tasks, Permission Modes (6 modes), Headless Mode, Session Management, Auto Memory, Agent Teams, Scheduled Tasks, Chrome Integration, Channels, Voice Dictation, and Bundled Skills*
+
+---
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.1.97

@@ -3,17 +3,25 @@
   <img alt="Claude How To" src="resources/logos/claude-howto-logo.svg">
 </picture>
 
+<p align="center">
+  <a href="https://github.com/trending">
+    <img src="https://img.shields.io/badge/GitHub-🔥%20%231%20Trending-purple?style=for-the-badge&logo=github"/>
+  </a>
+</p>
+
 [![GitHub Stars](https://img.shields.io/github/stars/luongnv89/claude-howto?style=flat&color=gold)](https://github.com/luongnv89/claude-howto/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/luongnv89/claude-howto?style=flat)](https://github.com/luongnv89/claude-howto/network/members)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.2.0-brightgreen)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-brightgreen)](CHANGELOG.md)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-2.1+-purple)](https://code.claude.com)
+
+🌐 **Language / Ngôn ngữ / 语言:** [English](README.md) | [Tiếng Việt](vi/README.md) | [中文](zh/README.md)
 
 # Master Claude Code in a Weekend
 
 Go from typing `claude` to orchestrating agents, hooks, skills, and MCP servers — with visual tutorials, copy-paste templates, and a guided learning path.
 
-**[Get Started in 15 Minutes](#-get-started-in-15-minutes)** | **[Find Your Level](#-not-sure-where-to-start)** | **[Browse the Feature Catalog](CATALOG.md)**
+**[Get Started in 15 Minutes](#get-started-in-15-minutes)** | **[Find Your Level](#not-sure-where-to-start)** | **[Browse the Feature Catalog](CATALOG.md)**
 
 ---
 
@@ -22,8 +30,8 @@ Go from typing `claude` to orchestrating agents, hooks, skills, and MCP servers 
 - [The Problem](#the-problem)
 - [How Claude How To Fixes This](#how-claude-how-to-fixes-this)
 - [How It Works](#how-it-works)
-- [Not Sure Where to Start?](#-not-sure-where-to-start)
-- [Get Started in 15 Minutes](#-get-started-in-15-minutes)
+- [Not Sure Where to Start?](#not-sure-where-to-start)
+- [Get Started in 15 Minutes](#get-started-in-15-minutes)
 - [What Can You Build With This?](#what-can-you-build-with-this)
 - [FAQ](#faq)
 - [Contributing](#contributing)
@@ -86,15 +94,15 @@ The real power is in combining features. Learn to wire slash commands + memory +
 
 Run `/lesson-quiz [topic]` after each module. The quiz pinpoints what you missed so you can fill gaps fast.
 
-**[Get Started in 15 Minutes](#-get-started-in-15-minutes)**
+**[Get Started in 15 Minutes](#get-started-in-15-minutes)**
 
 ---
 
-## Trusted by 5,900+ Developers
+## Trusted by 21,800+ Developers
 
-- **5,900+ GitHub stars** from developers who use Claude Code daily
-- **690+ forks** — teams adapting this guide for their own workflows
-- **Actively maintained** — synced with every Claude Code release (latest: v2.2.0, March 2026)
+- **21,800+ GitHub stars** from developers who use Claude Code daily
+- **2,585+ forks** — teams adapting this guide for their own workflows
+- **Actively maintained** — synced with every Claude Code release (latest: v2.3.0, April 2026)
 - **Community-driven** — contributions from developers who share their real-world configurations
 
 [![Star History Chart](https://api.star-history.com/svg?repos=luongnv89/claude-howto&type=Date)](https://star-history.com/#luongnv89/claude-howto&Date)
@@ -167,7 +175,7 @@ cp -r 03-skills/code-review ~/.claude/skills/
 # Follow the learning path for guided setup
 ```
 
-**[View the Full Installation Reference](#installation-quick-reference)**
+**[View the Full Installation Reference](#get-started-in-15-minutes)**
 
 ---
 
@@ -191,7 +199,7 @@ cp -r 03-skills/code-review ~/.claude/skills/
 Yes. MIT licensed, free forever. Use it in personal projects, at work, in your team — no restrictions beyond including the license notice.
 
 **Is this maintained?**
-Actively. The guide is synced with every Claude Code release. Current version: v2.2.0 (March 2026), compatible with Claude Code 2.1+.
+Actively. The guide is synced with every Claude Code release. Current version: v2.3.0 (April 2026), compatible with Claude Code 2.1+.
 
 **How is this different from the official docs?**
 The official docs are a feature reference. This guide is a tutorial with diagrams, production-ready templates, and a progressive learning path. They complement each other — start here to learn, reference the docs when you need specifics.
@@ -216,7 +224,7 @@ You already have Claude Code installed. The only thing between you and 10x produ
 
 MIT licensed. Free forever. Clone it, fork it, make it yours.
 
-**[Start the Learning Path ->](LEARNING-ROADMAP.md)** | **[Browse the Feature Catalog](CATALOG.md)** | **[Get Started in 15 Minutes](#-get-started-in-15-minutes)**
+**[Start the Learning Path ->](LEARNING-ROADMAP.md)** | **[Browse the Feature Catalog](CATALOG.md)** | **[Get Started in 15 Minutes](#get-started-in-15-minutes)**
 
 ---
 
@@ -853,15 +861,6 @@ Quick start:
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
 
-## Contributors
-
-Thanks to everyone who has contributed to this project!
-
-| Contributor | PRs |
-|-------------|-----|
-| [wjhrdy](https://github.com/wjhrdy) | [#1 - add a tool to create an epub](https://github.com/luongnv89/claude-howto/pull/1) |
-| [VikalpP](https://github.com/VikalpP) | [#7 - fix(docs): Use tilde fences for nested code blocks in concepts guide](https://github.com/luongnv89/claude-howto/pull/7) |
-
 ---
 
 ## License
@@ -870,6 +869,6 @@ MIT License - see [LICENSE](LICENSE). Free to use, modify, and distribute. The o
 
 ---
 
-**Last Updated**: March 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.1.97
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5
