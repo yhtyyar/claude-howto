@@ -1,0 +1,124 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd qoder-enterprise-system/core/mcp-intent-router && npm ci
+          cd ../mcp-checkpoint-manager && npm ci
+          cd ../mcp-hook-runner && npm ci
+
+      - name: Run ESLint
+        run: |
+          cd qoder-enterprise-system
+          npm run lint
+
+      - name: Type check
+        run: |
+          cd qoder-enterprise-system
+          npm run typecheck || true
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd qoder-enterprise-system/core/mcp-intent-router && npm ci
+          cd ../mcp-checkpoint-manager && npm ci
+          cd ../mcp-hook-runner && npm ci
+
+      - name: Build all packages
+        run: |
+          cd qoder-enterprise-system
+          npm run build:all
+
+      - name: Run tests
+        run: |
+          cd qoder-enterprise-system
+          npm test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./qoder-enterprise-system/coverage
+          flags: unittests
+          name: codecov-umbrella
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run npm audit
+        run: npm audit --audit-level moderate
+        continue-on-error: true
+
+  build-and-package:
+    name: Build & Package
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install and build
+        run: |
+          cd qoder-enterprise-system
+          make install
+          make build
+
+      - name: Package for distribution
+        run: |
+          cd qoder-enterprise-system
+          make package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: qoder-enterprise-system
+          path: qoder-enterprise-system/dist/*.tar.gz
