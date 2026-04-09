@@ -1,0 +1,48 @@
+---
+name: pre-commit-checks
+description: Pre-commit validation workflow
+type: pre-commit
+
+config:
+  failFast: true
+  timeout: 180
+  parallel: true
+  maxConcurrent: 3
+
+steps:
+  - id: lint
+    name: Run linter
+    type: command
+    config:
+      command: npm
+      args: ['run', 'lint']
+    continueOnError: false
+    timeout: 60
+
+  - id: typecheck
+    name: Type check
+    type: command
+    config:
+      command: npm
+      args: ['run', 'typecheck']
+    dependsOn: [lint]
+    timeout: 60
+
+  - id: test-quick
+    name: Quick tests
+    type: command
+    config:
+      command: npm
+      args: ['test', '--', '--testPathPattern=unit', '--passWithNoTests']
+    dependsOn: [lint]
+    timeout: 120
+
+  - id: security-audit
+    name: Security audit
+    type: command
+    config:
+      command: npm
+      args: ['audit', '--audit-level=moderate']
+    dependsOn: [typecheck, test-quick]
+    continueOnError: true
+    timeout: 30
