@@ -4,13 +4,17 @@ FastAPI server for workflow management and execution
 """
 
 import os
+import time
+from collections import defaultdict
 from contextlib import asynccontextmanager
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import structlog
 import yaml
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from .models import (
     ExecutionContext,
@@ -25,6 +29,27 @@ from .parser import WorkflowParser
 from .validator import SecurityValidator
 
 logger = structlog.get_logger(__name__)
+
+
+# Simple rate limiter (for production, use Redis)
+class RateLimiter:
+    def __init__(self, requests_per_minute: int = 30):
+        self.requests_per_minute = requests_per_minute
+        self.requests: Dict[str, list] = defaultdict(list)
+
+    def is_allowed(self, key: str) -> bool:
+        now = time.time()
+        window_start = now - 60
+        self.requests[key] = [t for t in self.requests[key] if t > window_start]
+        if len(self.requests[key]) >= self.requests_per_minute:
+            return False
+        self.requests[key].append(now)
+        return True
+
+
+rate_limiter = RateLimiter(
+    requests_per_minute=int(os.getenv("HOOK_RATE_LIMIT_PER_MINUTE", "30"))
+)
 
 
 class WorkflowService:
@@ -209,14 +234,52 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS middleware
+# Security middleware
+# 1. Trusted Host validation (production only)
+if os.getenv("ENVIRONMENT") == "production":
+    app.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=["qoder.com", "*.qoder.com", "localhost", "127.0.0.1"]
+    )
+
+# 2. CORS - restricted origins
+_ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=_ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization", "X-Request-ID"],
+    max_age=600,
 )
+
+# 3. Compression
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+
+# Rate limiting middleware
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    """Apply rate limiting to all requests"""
+    # Skip health checks
+    if request.url.path == "/health":
+        return await call_next(request)
+
+    client_key = request.headers.get("X-API-Key") or request.client.host
+
+    if not rate_limiter.is_allowed(client_key):
+        raise HTTPException(
+            status_code=429,
+            detail="Rate limit exceeded. Try again later.",
+            headers={"Retry-After": "60"}
+        )
+
+    response = await call_next(request)
+    return response
 
 
 def get_service() -> WorkflowService:

@@ -30,7 +30,14 @@ class IntentNLPService:
     - Semantic similarity with embeddings
     - Fuzzy matching with confidence scores
     - Context-aware boosting
+    - Input validation and DoS protection
     """
+
+    # Security limits
+    MAX_INPUT_LENGTH = 10000  # characters
+    MAX_CACHE_SIZE = 1000     # embeddings
+    MAX_PATTERNS = 50         # patterns per request
+    MAX_BATCH_SIZE = 100      # texts per embedding request
 
     def __init__(
         self,
@@ -55,8 +62,42 @@ class IntentNLPService:
 
         self.model = SentenceTransformer(model_name, device=self.device)
         self._cache: Dict[str, np.ndarray] = {}
+        self._cache_hits = 0
+        self._cache_misses = 0
 
         logger.info("Model loaded successfully")
+
+    def _validate_input(self, text: str, max_length: int = MAX_INPUT_LENGTH) -> None:
+        """Validate input text for security"""
+        if not isinstance(text, str):
+            raise ValueError(f"Input must be string, got {type(text)}")
+
+        if not text or not text.strip():
+            raise ValueError("Input cannot be empty")
+
+        if len(text) > max_length:
+            raise ValueError(
+                f"Input too long: {len(text)} chars (max {max_length})"
+            )
+
+        # Check for potentially malicious content
+        if self._contains_dangerous_content(text):
+            raise ValueError("Input contains potentially dangerous content")
+
+    def _contains_dangerous_content(self, text: str) -> bool:
+        """Check for dangerous content patterns"""
+        import re
+
+        # Check for extremely long repeated patterns (DoS attempt)
+        repeated_pattern = re.search(r"(.{100,})\1{10,}", text)
+        if repeated_pattern:
+            return True
+
+        # Check for null bytes or control characters
+        if any(ord(c) < 32 and c not in "\t\n\r" for c in text):
+            return True
+
+        return False
 
     def _check_cuda(self) -> bool:
         """Check if CUDA is available"""
@@ -77,6 +118,15 @@ class IntentNLPService:
             Best matching intent with confidence scores
         """
         start_time = time.time()
+
+        # Validate input
+        self._validate_input(request.input, self.MAX_INPUT_LENGTH)
+
+        # Validate pattern count
+        if len(request.patterns) > self.MAX_PATTERNS:
+            raise ValueError(
+                f"Too many patterns: {len(request.patterns)} (max {self.MAX_PATTERNS})"
+            )
 
         input_text = request.input.lower().strip()
         pattern_matches: List[PatternMatch] = []
@@ -227,11 +277,26 @@ class IntentNLPService:
         )
 
     def _get_embedding(self, text: str) -> np.ndarray:
-        """Get embedding with caching"""
+        """Get embedding with caching and validation"""
+        # Validate input
+        self._validate_input(text, self.MAX_INPUT_LENGTH)
+
+        # Check cache
         if text in self._cache:
+            self._cache_hits += 1
             return self._cache[text]
 
+        self._cache_misses += 1
+
+        # Compute embedding
         embedding = self.model.encode(text)
+
+        # Manage cache size (simple LRU via dict ordering in Python 3.7+)
+        if len(self._cache) >= self.MAX_CACHE_SIZE:
+            # Remove oldest item
+            oldest_key = next(iter(self._cache))
+            del self._cache[oldest_key]
+
         self._cache[text] = embedding
         return embedding
 
@@ -273,8 +338,18 @@ class IntentNLPService:
         self, request: SemanticEmbeddingRequest
     ) -> SemanticEmbeddingResponse:
         """
-        Get embeddings for texts
+        Get embeddings for texts with validation
         """
+        # Validate batch size
+        if len(request.texts) > self.MAX_BATCH_SIZE:
+            raise ValueError(
+                f"Batch too large: {len(request.texts)} (max {self.MAX_BATCH_SIZE})"
+            )
+
+        # Validate each text
+        for text in request.texts:
+            self._validate_input(text, self.MAX_INPUT_LENGTH)
+
         embeddings = self.model.encode(request.texts)
 
         return SemanticEmbeddingResponse(

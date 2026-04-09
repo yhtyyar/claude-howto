@@ -438,26 +438,81 @@ class WorkflowExecutor:
         )
 
     def _evaluate_condition(self, expression: str, context: ExecutionContext) -> bool:
-        """Evaluate a condition expression"""
-        # Simple evaluation - replace placeholders
-        # In production, use proper expression evaluation
-        evaluated = expression
+        """
+        Evaluate a condition expression safely using simpleeval.
 
-        # Replace env.*
-        for key, value in context.env.items():
-            evaluated = evaluated.replace(f"env.{key}", f"'{value}'")
-
-        # Replace git.*
-        if context.git_branch:
-            evaluated = evaluated.replace("git.branch", f"'{context.git_branch}'")
-        if context.git_commit:
-            evaluated = evaluated.replace("git.commit", f"'{context.git_commit}'")
-
+        Supports:
+        - env.VAR_NAME: Environment variables
+        - git.branch: Current git branch
+        - git.commit: Current git commit
+        - Standard Python operators: ==, !=, <, >, in, not in, etc.
+        """
         try:
-            # WARNING: eval is dangerous, use safe_eval in production
-            # This is simplified for demonstration
-            return bool(eval(evaluated, {"__builtins__": {}}, {}))
-        except:
+            from simpleeval import SimpleEval
+
+            # Build safe namespace
+            names = {
+                "env": context.env,
+                "git": {
+                    "branch": context.git_branch or "",
+                    "commit": context.git_commit or "",
+                },
+                "true": True,
+                "false": False,
+                "null": None,
+            }
+
+            # Add string methods that are safe
+            for name in ["len", "str", "int", "bool"]:
+                names[name] = __builtins__.get(name) if isinstance(__builtins__, dict) else getattr(__builtins__, name, None)
+
+            evaluator = SimpleEval(names=names)
+            result = evaluator.eval(expression)
+
+            return bool(result)
+
+        except ImportError:
+            # Fallback: basic placeholder replacement with safe evaluation
+            self._log("Warning: simpleeval not installed, using limited evaluation")
+            return self._evaluate_condition_fallback(expression, context)
+
+        except Exception as e:
+            self._log(f"Condition evaluation error: {e}")
+            return False
+
+    def _evaluate_condition_fallback(
+        self, expression: str, context: ExecutionContext
+    ) -> bool:
+        """
+        Fallback evaluation without simpleeval.
+        Only supports basic equality checks.
+        """
+        try:
+            # Simple pattern: env.VAR == "value" or git.branch == "main"
+            import re
+
+            # Replace env.VAR
+            for key, value in context.env.items():
+                expression = expression.replace(f"env.{key}", f"'{value}'")
+
+            # Replace git.*
+            if context.git_branch:
+                expression = expression.replace("git.branch", f"'{context.git_branch}'")
+            if context.git_commit:
+                expression = expression.replace("git.commit", f"'{context.git_commit}'")
+
+            # Only allow safe characters
+            if not re.match(r"^[\w\s'\"=!<>.]+$"):
+                self._log(f"Unsafe characters in expression: {expression}")
+                return False
+
+            # Very limited eval with no builtins
+            allowed = {"__builtins__": {}}
+            result = eval(expression, allowed, {})  # nosec: B307 - validated above
+            return bool(result)
+
+        except Exception as e:
+            self._log(f"Fallback evaluation error: {e}")
             return False
 
     def _log(self, message: str) -> None:
