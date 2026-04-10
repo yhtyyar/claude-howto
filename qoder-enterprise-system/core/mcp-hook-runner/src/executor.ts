@@ -63,7 +63,7 @@ export async function executeWorkflow(
 
       // Check for failures
       const failures = levelResults.filter((r) => !r.success && !r.skipped);
-      if (failures.length > 0 && workflow.config.failFast) {
+      if (failures.length > 0 && workflow.config?.failFast) {
         log(logs, `Fail-fast triggered, stopping workflow`);
         break;
       }
@@ -161,9 +161,9 @@ async function executeLevel(
   previousResults: StepResult[],
   logs: string[]
 ): Promise<StepResult[]> {
-  if (workflow.config.parallel && steps.length > 1) {
+  if (workflow.config?.parallel && steps.length > 1) {
     // Execute in parallel with concurrency limit
-    const maxConcurrent = workflow.config.maxConcurrent;
+    const maxConcurrent = workflow.config?.maxConcurrent;
     const results: StepResult[] = [];
 
     for (let i = 0; i < steps.length; i += maxConcurrent) {
@@ -278,7 +278,11 @@ async function executeCommandStep(
   const command = config.command;
   const args = config.args || [];
   const cwd = config.cwd || context.cwd;
-  const env = { ...process.env, ...context.env, ...config.env };
+  const env: Record<string, string> = {
+    ...process.env,
+    ...context.env,
+    ...config.env
+  } as Record<string, string>;
 
   return runCommand(command, args, { cwd, env, timeout: step.timeout });
 }
@@ -482,7 +486,7 @@ function evaluateCondition(expression: string, context: ExecutionContext): boole
     // Replace git.*
     if (context.git) {
       evaluated = evaluated.replace(/git\.(\w+)/g, (_, key) => {
-        const value = (context.git as Record<string, unknown>)[key];
+        const value = (context.git as unknown as Record<string, unknown>)[key];
         return JSON.stringify(value || '');
       });
     }

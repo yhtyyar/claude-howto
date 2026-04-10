@@ -87,13 +87,13 @@ export function validateCommand(command: string): ValidationResult {
   }
 
   // Extract base command (first word)
-  const baseCommand = command.trim().split(/\s+/)[0];
+  const baseCommand = command.trim().split(/\s+/)[0] ?? '';
 
   // Check whitelist
   if (!ALLOWED_COMMANDS.has(baseCommand)) {
     errors.push(
       `Command "${baseCommand}" is not in the allowed command list. ` +
-        `Allowed commands: ${Array.from(ALLOWED_COMMANDS).join(', ')}`
+      `Allowed commands: ${Array.from(ALLOWED_COMMANDS).join(', ')}`
     );
   }
 
@@ -186,7 +186,7 @@ export function validateEnvName(name: string): ValidationResult {
     if (name.toUpperCase().includes(sensitive)) {
       errors.push(
         `Environment variable "${name}" appears to contain sensitive data. ` +
-          `Consider using a secrets manager instead.`
+        `Consider using a secrets manager instead.`
       );
     }
   }

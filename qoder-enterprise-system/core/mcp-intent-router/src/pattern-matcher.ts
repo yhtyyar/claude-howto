@@ -6,14 +6,14 @@
  * @version 1.0.0
  */
 
-import Fuse from 'fuse.js';
+import { default as Fuse } from 'fuse.js';
 import type { Pattern, PatternMatchResult, PatternType } from './types.js';
 
 /**
  * Pattern matching engine
  */
 export class PatternMatcher {
-  private fuseOptions: Fuse.IFuseOptions<string>;
+  private fuseOptions: any;
 
   constructor() {
     this.fuseOptions = {
@@ -165,8 +165,9 @@ export class PatternMatcher {
     const fuse = new Fuse([input], this.fuseOptions);
     const results = fuse.search(pattern);
 
-    if (results.length > 0 && results[0].score !== undefined) {
-      const score = results[0].score;
+    if (results.length > 0) {
+      const firstResult = results[0];
+      const score = firstResult?.score ?? 0;
       // Fuse score is 0-1 where 0 is perfect match
       // Convert to our confidence format (0-1 where 1 is perfect)
       const confidence = (1 - score) * weight;
@@ -177,7 +178,7 @@ export class PatternMatcher {
           matched: true,
           confidence,
           details: {
-            matchedText: results[0].item,
+            matchedText: firstResult?.item ?? '',
             matchIndex: 0,
           },
         };
@@ -281,12 +282,14 @@ export class PatternMatcher {
     }
 
     // Sort by position
-    const sorted = [...matches].sort((a, b) => a.position - b.position);
+    const sorted = [...matches].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
     // Calculate average distance between consecutive matches
     let totalDistance = 0;
     for (let i = 1; i < sorted.length; i++) {
-      totalDistance += sorted[i].position - sorted[i - 1].position;
+      const currentPos = sorted[i]?.position ?? 0;
+      const prevPos = sorted[i - 1]?.position ?? 0;
+      totalDistance += currentPos - prevPos;
     }
 
     const averageDistance = totalDistance / (sorted.length - 1);

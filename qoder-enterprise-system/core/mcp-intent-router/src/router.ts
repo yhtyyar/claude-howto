@@ -71,7 +71,7 @@ export class IntentRouter {
 
     console.log(
       `[IntentRouter] Initialized with ${this.intents.size} intents, ` +
-        `cache: ${this.config.cacheEnabled ? 'enabled' : 'disabled'}`
+      `cache: ${this.config.cacheEnabled ? 'enabled' : 'disabled'}`
     );
   }
 
@@ -232,7 +232,7 @@ export class IntentRouter {
     return {
       intent,
       confidence: maxConfidence,
-      matchedPattern: bestPattern,
+      matchedPattern: bestPattern!
     };
   }
 

@@ -208,22 +208,22 @@ async function main(): Promise<void> {
       try {
         switch (name) {
           case 'create_checkpoint':
-            return await handleCreateCheckpoint(manager, args);
+            return await handleCreateCheckpoint(manager, args || {});
 
           case 'restore_checkpoint':
-            return await handleRestoreCheckpoint(manager, args);
+            return await handleRestoreCheckpoint(manager, args || {});
 
           case 'list_checkpoints':
-            return await handleListCheckpoints(manager, args);
+            return await handleListCheckpoints(manager, args || {});
 
           case 'delete_checkpoint':
-            return await handleDeleteCheckpoint(manager, args);
+            return await handleDeleteCheckpoint(manager, args || {});
 
           case 'diff_checkpoints':
-            return await handleDiffCheckpoints(manager, args);
+            return await handleDiffCheckpoints(manager, args || {});
 
           case 'get_checkpoint_metadata':
-            return await handleGetMetadata(manager, args);
+            return await handleGetMetadata(manager, args || {});
 
           case 'get_stats':
             return await handleGetStats(manager);

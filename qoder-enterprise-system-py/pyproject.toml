@@ -33,7 +33,7 @@ transformers = "^4.46.0"
 torch = "^2.5.0"
 sentence-transformers = "^3.2.0"
 scikit-learn = "^1.5.0"
-spacy = "^3.8.0"
+# spacy = "^3.8.0"  # Temporarily disabled - compatibility issue with Python 3.13 on Windows
 
 # Git Operations
 gitpython = "^3.1.43"

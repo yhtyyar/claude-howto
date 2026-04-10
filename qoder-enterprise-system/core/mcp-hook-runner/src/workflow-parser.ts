@@ -118,7 +118,7 @@ export function parseWorkflowYaml(
       name: result.data.name,
       description: result.data.description,
       type: result.data.type,
-      steps: result.data.steps as Step[],
+      steps: result.data.steps as unknown as Step[],
       condition: result.data.condition,
       config: {
         failFast: result.data.config?.failFast ?? true,
@@ -220,7 +220,7 @@ function validateStepConfig(step: Step): ValidationResult {
 
   switch (step.type) {
     case 'command':
-      if (!step.config.command || typeof step.config.command !== 'string') {
+      if (!(step.config as any).command || typeof (step.config as any).command !== 'string') {
         errors.push({
           path: 'config.command',
           message: 'Command step requires config.command',
@@ -230,7 +230,7 @@ function validateStepConfig(step: Step): ValidationResult {
       break;
 
     case 'script':
-      if (!step.config.path || typeof step.config.path !== 'string') {
+      if (!(step.config as any).path || typeof (step.config as any).path !== 'string') {
         errors.push({
           path: 'config.path',
           message: 'Script step requires config.path',
@@ -240,7 +240,7 @@ function validateStepConfig(step: Step): ValidationResult {
       break;
 
     case 'hook':
-      if (!step.config.hook || typeof step.config.hook !== 'string') {
+      if (!(step.config as any).hook || typeof (step.config as any).hook !== 'string') {
         errors.push({
           path: 'config.hook',
           message: 'Hook step requires config.hook',
@@ -250,14 +250,14 @@ function validateStepConfig(step: Step): ValidationResult {
       break;
 
     case 'condition':
-      if (!step.config.expression || typeof step.config.expression !== 'string') {
+      if (!(step.config as any).expression || typeof (step.config as any).expression !== 'string') {
         errors.push({
           path: 'config.expression',
           message: 'Condition step requires config.expression',
           code: 'MISSING_EXPRESSION',
         });
       }
-      if (!step.config.then || !Array.isArray(step.config.then)) {
+      if (!(step.config as any).then || !Array.isArray((step.config as any).then)) {
         errors.push({
           path: 'config.then',
           message: 'Condition step requires config.then array',
@@ -267,7 +267,7 @@ function validateStepConfig(step: Step): ValidationResult {
       break;
 
     case 'parallel':
-      if (!step.config.steps || !Array.isArray(step.config.steps)) {
+      if (!(step.config as any).steps || !Array.isArray((step.config as any).steps)) {
         errors.push({
           path: 'config.steps',
           message: 'Parallel step requires config.steps array',

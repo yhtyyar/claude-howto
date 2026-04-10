@@ -134,7 +134,7 @@ export async function stashChanges(
   if (lines.length > 0 && lines[0]) {
     const match = lines[0].match(/^(stash@\{\d+\})/);
     if (match) {
-      return match[1];
+      return match[1] ?? '';
     }
   }
 
@@ -254,8 +254,8 @@ export function parseDiffStat(diffOutput: string): Array<{
       /^\s*(.+?)\s*\|\s*(\d+)\s*([+-]*)([+-]*)$/
     );
     if (match) {
-      const path = match[1].trim();
-      const changes = parseInt(match[2], 10);
+      const path = (match[1] ?? '').trim();
+      const changes = parseInt(match[2] ?? '0', 10);
       const additions = (match[3] || '').length;
       const deletions = (match[4] || '').length;
 

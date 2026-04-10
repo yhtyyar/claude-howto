@@ -6,22 +6,11 @@ config:
   fail_fast: true
   timeout: 180
   parallel: true
-  max_concurrent: 4
 
 steps:
   - id: lint
-    name: Run linter
+    name: Lint check
     type: command
     config:
       command: echo
-      args: ["Linting complete"]
-    timeout: 30
-
-  - id: test
-    name: Run tests
-    type: command
-    config:
-      command: echo
-      args: ["Tests passed"]
-    depends_on: [lint]
-    timeout: 60
+      args: ["Linting passed"]

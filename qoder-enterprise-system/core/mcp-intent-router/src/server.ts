@@ -210,19 +210,19 @@ async function main(): Promise<void> {
       try {
         switch (name) {
           case 'detect_intent':
-            return await handleDetectIntent(router, args);
+            return await handleDetectIntent(router, args || {});
 
           case 'list_intents':
-            return await handleListIntents(router, args);
+            return await handleListIntents(router, args || {});
 
           case 'get_intent':
-            return await handleGetIntent(router, args);
+            return await handleGetIntent(router, args || {});
 
           case 'reload_intents':
-            return await handleReloadIntents(router, args);
+            return await handleReloadIntents(router, args || {});
 
           case 'get_spec':
-            return await handleGetSpec(router, args);
+            return await handleGetSpec(router, args || {});
 
           case 'get_stats':
             return await handleGetStats(router);
@@ -287,19 +287,19 @@ async function handleDetectIntent(
     intent: result.error
       ? null
       : {
-          id: result.intent.id,
-          name: result.intent.name,
-          description: result.intent.description,
-          category: result.intent.category,
-          spec_path: result.intent.spec_path,
-        },
+        id: result.intent.id,
+        name: result.intent.name,
+        description: result.intent.description,
+        category: result.intent.category,
+        spec_path: result.intent.spec_path,
+      },
     confidence: result.confidence,
     matched_pattern: result.error
       ? null
       : {
-          type: result.matchedPattern.type,
-          value: result.matchedPattern.value,
-        },
+        type: result.matchedPattern.type,
+        value: result.matchedPattern.value,
+      },
     alternatives: result.alternativeIntents.map((intent) => ({
       id: intent.id,
       name: intent.name,

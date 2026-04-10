@@ -589,7 +589,7 @@ export class CheckpointManager {
    */
   private extractCheckpointId(message: string): string | null {
     const match = message.match(/CHECKPOINT_ID:\s*(\w+)/);
-    return match ? match[1] : null;
+    return match ? (match[1] ?? null) : null;
   }
 
   /**
@@ -600,7 +600,7 @@ export class CheckpointManager {
     for (const line of lines) {
       const match = line.match(/\[qoder-chk\]\s*(.+)/);
       if (match) {
-        return match[1].trim();
+        return (match[1] ?? '').trim();
       }
     }
     return null;

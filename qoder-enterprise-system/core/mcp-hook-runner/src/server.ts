@@ -166,19 +166,19 @@ async function main(): Promise<void> {
       try {
         switch (name) {
           case 'run_workflow':
-            return await handleRunWorkflow(args);
+            return await handleRunWorkflow(args || {});
 
           case 'run_hook':
-            return await handleRunHook(args);
+            return await handleRunHook(args || {});
 
           case 'list_workflows':
-            return await handleListWorkflows(args);
+            return await handleListWorkflows(args || {});
 
           case 'validate_workflow':
-            return await handleValidateWorkflow(args);
+            return await handleValidateWorkflow(args || {});
 
           case 'get_workflow':
-            return await handleGetWorkflow(args);
+            return await handleGetWorkflow(args || {});
 
           case 'reload_workflows':
             return await handleReloadWorkflows();
@@ -258,7 +258,7 @@ async function handleRunWorkflow(
 
   const context: ExecutionContext = {
     cwd: (args.context as { cwd?: string })?.cwd || process.cwd(),
-    env: { ...process.env, ...((args.context as { env?: Record<string, string> })?.env || {}) },
+    env: { ...process.env, ...((args.context as { env?: Record<string, string> })?.env || {}) } as Record<string, string>,
   };
 
   const result = await executeWorkflow(workflow, context);
@@ -299,7 +299,7 @@ async function handleRunHook(
 
   const context: ExecutionContext = {
     cwd: (args.context as { cwd?: string })?.cwd || process.cwd(),
-    env: { ...process.env, ...((args.context as { env?: Record<string, string> })?.env || {}) },
+    env: { ...process.env, ...((args.context as { env?: Record<string, string> })?.env || {}) } as Record<string, string>,
   };
 
   const results = await Promise.all(

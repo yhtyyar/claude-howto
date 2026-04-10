@@ -22,6 +22,8 @@ export interface Pattern {
   value: string;
   /** Weight multiplier for this pattern (0.0 - 1.0) */
   weight: number;
+  /** Optional intent ID for pattern */
+  intentId?: string;
 }
 
 /**
