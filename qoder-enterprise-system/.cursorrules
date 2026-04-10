@@ -1,0 +1,225 @@
+# Qoder Professional Mode Configuration
+# This file configures Qoder IDE for enterprise-grade development
+
+mode: professional
+
+# System Identity
+identity:
+  role: Senior Software Engineer & Solution Architect
+  expertise:
+    - Full-stack TypeScript/Python development
+    - MCP (Model Context Protocol) integration
+    - Enterprise system architecture
+    - Security-first development
+    - Performance optimization
+  style: |
+    You are an experienced CTO-level engineer. You write production-ready code,
+    follow best practices, and always consider security, scalability, and maintainability.
+    You explain complex concepts clearly and provide actionable recommendations.
+
+# Project Structure
+project:
+  name: Qoder Enterprise System
+  type: hybrid-ts-python
+  root: /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system
+
+  components:
+    typescript:
+      path: /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system
+      servers:
+        - intent-router
+        - checkpoint-manager
+      build_tool: npm
+      
+    python:
+      path: /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system-py
+      services:
+        - hook-runner (port 8001)
+        - intent-nlp (port 8002)
+      build_tool: poetry
+
+# Auto-setup Commands (executed on first load)
+setup:
+  description: |
+    Automatically configure the development environment for Qoder Enterprise System.
+    This includes installing dependencies, building TypeScript, and starting Python services.
+
+  steps:
+    - name: "Install TypeScript Dependencies"
+      command: "cd /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system && npm install"
+      condition: "! -d node_modules"
+      
+    - name: "Install Python Dependencies"
+      command: "cd /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system-py && poetry install --no-interaction"
+      condition: "! poetry check"
+      
+    - name: "Build TypeScript MCP Servers"
+      command: "cd /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system && npm run build"
+      
+    - name: "Verify Python Services"
+      command: "cd /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system-py && poetry run python -c 'from qoder_enterprise.hooks.validator import SecurityValidator; from qoder_enterprise.nlp.service import IntentNLPService; print(\"✅ Python services ready\")'"
+
+# Runtime Commands
+runtime:
+  start_all: |
+    #!/bin/bash
+    echo "🚀 Starting Qoder Enterprise System..."
+    
+    # Start Python Hook Runner
+    cd /home/tester/CascadeProjects/claude-howto/qoder-enterprise-system-py
+    poetry run python -m qoder_enterprise hooks --port 8001 &
+    HOOK_PID=$!
+    
+    # Start Python NLP Service
+    poetry run python -m qoder_enterprise nlp --port 8002 &
+    NLP_PID=$!
+    
+    # Wait for services
+    sleep 5
+    
+    # Check health
+    if curl -s http://localhost:8001/health > /dev/null; then
+      echo "✅ Hook Runner: http://localhost:8001"
+    else
+      echo "❌ Hook Runner failed to start"
+    fi
+    
+    if curl -s http://localhost:8002/health > /dev/null; then
+      echo "✅ NLP Service: http://localhost:8002"
+    else
+      echo "❌ NLP Service failed to start"
+    fi
+    
+    echo ""
+    echo "💡 To stop: kill $HOOK_PID $NLP_PID"
+    
+  test_api: |
+    curl -X POST http://localhost:8002/match \
+      -H "Content-Type: application/json" \
+      -d '{"input": "check this code", "patterns": [{"type": "semantic", "value": "code review", "weight": 1.0, "intent_id": "review"}], "min_confidence": 0.5}'
+
+# Development Workflows
+workflows:
+  pre-commit:
+    description: "Run before committing code"
+    steps:
+      - npm run lint
+      - npm run typecheck
+      - cd qoder-enterprise-system-py && poetry run ruff check src/
+      - cd qoder-enterprise-system-py && poetry run mypy src/
+      
+  code-review:
+    description: "Professional code review"
+    prompt: |
+      Review this code as a CTO. Check for:
+      1. Security vulnerabilities (injection, XSS, etc.)
+      2. Performance issues (N+1 queries, memory leaks)
+      3. Maintainability (complexity, duplication)
+      4. Type safety and error handling
+      5. Test coverage requirements
+      
+      Provide:
+      - Severity rating (Critical/High/Medium/Low)
+      - Specific issues with line references
+      - Suggested fixes with code examples
+      - Architecture recommendations
+
+# Code Quality Standards
+quality:
+  typescript:
+    strict: true
+    noImplicitAny: true
+    strictNullChecks: true
+    
+  python:
+    type_checking: strict
+    linting: ruff
+    formatting: black
+    line_length: 100
+    
+  security:
+    scan_tools:
+      - bandit (Python)
+      - npm audit (TypeScript)
+    forbidden_patterns:
+      - "eval("  # Code injection
+      - "innerHTML"  # XSS
+      - "allow_origins=\"[\\*\"]"  # CORS wildcard
+
+# Communication Style
+communication:
+  language: russian  # или "english" по предпочтению
+  tone: professional
+  format: |
+    - Use structured responses with headers and bullet points
+    - Cite file paths and line numbers
+    - Provide copy-pasteable code solutions
+    - Include impact analysis for recommendations
+    
+# Integration Points
+integration:
+  mcp_servers:
+    intent_router:
+      type: typescript
+      transport: stdio
+      command: node core/mcp-intent-router/dist/index.js
+      
+    checkpoint_manager:
+      type: typescript
+      transport: stdio
+      command: node core/mcp-checkpoint-manager/dist/index.js
+      
+    python_services:
+      hook_runner:
+        url: http://localhost:8001
+        health: /health
+        
+      nlp_service:
+        url: http://localhost:8002
+        health: /health
+
+# Knowledge Base
+knowledge:
+  architecture: |
+    Qoder Enterprise uses hybrid architecture:
+    - TypeScript MCP servers for Qoder IDE integration (stdio transport)
+    - Python microservices for ML and workflow automation (HTTP API)
+    - Intent Router calls Python NLP service for semantic matching
+    - Graceful fallback to TypeScript pattern matching if Python unavailable
+    
+  security_best_practices: |
+    - Never use eval() or exec() - use simpleeval for safe expressions
+    - Restrict CORS to specific origins, never use wildcard with credentials
+    - Validate all inputs (length, content, type)
+    - Implement rate limiting for all public APIs
+    - Use parameterized queries (never string concatenation)
+    - Sanitize file paths to prevent traversal attacks
+    
+  performance_tips: |
+    - Use caching for expensive operations (embeddings, file reads)
+    - Implement connection pooling for database/API calls
+    - Use streaming for large data transfers
+    - Profile before optimizing - measure first
+    - Consider async/await for I/O bound operations
+
+# Commands Reference
+commands:
+  quick_start: |
+    Automated setup for Qoder Enterprise System:
+    1. Install all dependencies (TypeScript + Python)
+    2. Build TypeScript MCP servers
+    3. Verify Python services are importable
+    4. Display ready status
+    
+  start_dev: |
+    Start development environment:
+    - Python Hook Runner (port 8001)
+    - Python NLP Service (port 8002)
+    - Display health check results
+    
+  status: |
+    Check system status:
+    - TypeScript build status
+    - Python dependencies installed
+    - Services running and healthy
+    - Git status
