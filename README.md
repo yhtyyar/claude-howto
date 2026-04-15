@@ -15,7 +15,7 @@
 [![Version](https://img.shields.io/badge/version-2.3.0-brightgreen)](CHANGELOG.md)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-2.1+-purple)](https://code.claude.com)
 
-🌐 **Language / Ngôn ngữ / 语言:** [English](README.md) | [Tiếng Việt](vi/README.md) | [中文](zh/README.md)
+🌐 **Language / Ngôn ngữ / 语言 / Мова:** [English](README.md) | [Tiếng Việt](vi/README.md) | [中文](zh/README.md) | [Українська](uk/README.md)
 
 # Master Claude Code in a Weekend
 
@@ -869,6 +869,9 @@ MIT License - see [LICENSE](LICENSE). Free to use, modify, and distribute. The o
 
 ---
 
-**Last Updated**: April 9, 2026
-**Claude Code Version**: 2.1.97
+**Last Updated**: April 11, 2026
+**Claude Code Version**: 2.1.101
+**Sources**:
+- https://code.claude.com/docs/en/overview
+- https://code.claude.com/docs/en/commands
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5
