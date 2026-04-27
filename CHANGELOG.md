@@ -1,5 +1,81 @@
 # Changelog
 
+## [v2.4.0] — 2026-04-27
+
+### Synced to Claude Code v2.1.119
+
+Bumps tutorial coverage from Claude Code v2.1.112 → v2.1.119 (April 23, 2026 release).
+v2.1.120 was published April 24 and rolled back due to regressions; clients are
+auto-rolled back to v2.1.119, which remains the stable target.
+
+### Added (English docs)
+
+- Native binary packaging note (v2.1.113) — CLI now ships per-platform native binaries
+- `bfs`/`ugrep` Glob/Grep substitution footnote on native macOS/Linux builds (v2.1.117)
+- `mcp_tool` hook type with example (v2.1.118)
+- `duration_ms` field on PostToolUse / PostToolUseFailure inputs (v2.1.119)
+- `prUrlTemplate` setting (v2.1.119) and expanded `--from-pr` provider list (GitLab, Bitbucket)
+- `cleanupPeriodDays` extended scope (checkpoints + tasks + shell-snapshots + backups, v2.1.117)
+- Plugin marketplace enforcement on every lifecycle event (v2.1.117) and `hostPattern`/`pathPattern` regex (v2.1.119)
+- New env vars: `DISABLE_UPDATES`, `CLAUDE_CODE_HIDE_CWD`, `CLAUDE_CODE_FORK_SUBAGENT`, `OTEL_LOG_TOOL_DETAILS`, `ENABLE_TOOL_SEARCH` Vertex opt-in
+- New slash commands: `/btw`, `/theme` with custom themes
+- `/usage` canonical command (merges `/cost` + `/stats`, v2.1.118)
+- Forked subagents (`CLAUDE_CODE_FORK_SUBAGENT=1`, v2.1.117)
+- Auto mode `"$defaults"` token (v2.1.118)
+- `wslInheritsWindowsSettings` managed policy (v2.1.118)
+- Vim visual / visual-line modes (v2.1.118)
+- `claude install [version]` and `claude plugin tag` subcommands
+
+### Changed
+
+- Documentation host migrated: `docs.anthropic.com/en/docs/claude-code/*` → `code.claude.com/docs/en/*`
+- Opus 4.7 effort levels: `xhigh` is now the Claude Code default since the 2026-04-16 launch; Opus 4.7 native context window confirmed at 1M (v2.1.117 fixed `/context` miscounting it as 200K)
+- Default effort raised from `medium` to `high` for Pro/Max subscribers on Opus 4.6 / Sonnet 4.6 (v2.1.117)
+- `STYLE_GUIDE.md` Source URL updated from Claude Apps article to `code.claude.com/docs/en/changelog`
+
+### Deprecated (tracked, not removed)
+
+- `includeCoAuthoredBy` setting → use `attribution.commit` / `attribution.pr`
+- `voiceEnabled` setting → use `voice.enabled`
+
+### Notes for translation maintainers
+
+The `vi/`, `zh/`, and `uk/` localized trees are community-maintained and may lag the English source. Contributors syncing translations should diff against the English files updated in this release.
+
+## v2.1.112 — 2026-04-16
+
+### Highlights
+
+- Sync all English tutorials with Claude Code v2.1.112 and the new Opus 4.7 model (`claude-opus-4-7`), including the new `xhigh` effort level (default on Opus 4.7, between `high` and `max`), two new built-in slash commands (`/ultrareview`, `/less-permission-prompts`), auto-mode no longer requiring `--enable-auto-mode` for Max subscribers on Opus 4.7, the PowerShell tool on Windows, the "Auto (match terminal)" theme, and plan files named after prompts. All 18 EN doc footers bumped to Claude Code v2.1.112. @Luong NGUYEN
+
+### Features
+
+- Add complete Ukrainian (uk) localization across all modules, root docs, examples, and references (039dde2) @Evgenij I
+
+### Bug Fixes
+
+- Correct pre-tool-check.sh hook protocol bugs (bce7cf8) @yarlinghe
+- Change bad mermaid example to text block to pass CI (b8a7b1f) @Evgenij I
+- Fix CP1251 encoding in Ukrainian claude_concepts_guide.md ToC (d970cc6) @Evgenij I
+- Replace stub Ukrainian README with full translation, fix broken anchors (f6d73e2) @Evgenij I
+- Correct Claude Code version to 2.1.97 across all footers (63a1416) @Luong NGUYEN
+- Apply 2026-04-09 documentation accuracy updates (e015f39) @Luong NGUYEN
+
+### Documentation
+
+- Sync to Claude Code v2.1.112 (Opus 4.7, `xhigh` effort, `/ultrareview`, `/less-permission-prompts`, PowerShell tool, Auto-match-terminal theme) @Luong NGUYEN
+- Sync to Claude Code v2.1.110 (TUI, push notifications, session recap) (15f0085) @Luong NGUYEN
+- Sync to Claude Code v2.1.101 with `/team-onboarding`, `/ultraplan`, Monitor tool (2deba3a) @Luong NGUYEN
+- Sync Vietnamese documentation with English source (561c6cb) @Thiên Toán
+- Update Last Updated date and Claude Code version across all files (7f2e773) @Luong NGUYEN
+- Add Ukrainian language link to language switcher (9c224ff) @Luong NGUYEN
+- Remove contributors section (f07313d) @Luong NGUYEN
+- Update GitHub metrics to 21,800+ stars, 2,585+ forks (4f55374) @Luong NGUYEN
+
+**Full Changelog**: https://github.com/luongnv89/claude-howto/compare/v2.3.0...v2.1.112
+
+---
+
 ## v2.3.0 — 2026-04-07
 
 ### Features

@@ -218,7 +218,7 @@ Event-driven automation scripts that execute automatically.
 
 **Usage**: Configured in settings, executed automatically
 
-**Hook Types** (4 types, 25 events):
+**Hook Types** (5 types, 28 events):
 - Tool Hooks: PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest
 - Session Hooks: SessionStart, SessionEnd, Stop, StopFailure, SubagentStart, SubagentStop
 - Task Hooks: UserPromptSubmit, TaskCompleted, TaskCreated, TeammateIdle
@@ -459,7 +459,7 @@ Command-line interface usage patterns and reference.
 - `claude` - Start interactive session
 - `claude -p "prompt"` - Headless/non-interactive mode
 - `claude web` - Launch web session
-- `claude --model` - Select model (Sonnet 4.6, Opus 4.6)
+- `claude --model` - Select model (Sonnet 4.6, Opus 4.7, Haiku 4.5)
 - `claude --permission-mode` - Set permission mode
 - `claude --remote` - Enable remote control via WebSocket
 
@@ -874,10 +874,14 @@ Want to add more examples? Follow the structure:
 
 ---
 
-**Last Updated**: April 11, 2026
-**Claude Code Version**: 2.1.101
+**Last Updated**: April 24, 2026
+**Claude Code Version**: 2.1.119
 **Sources**:
 - https://code.claude.com/docs/en/overview
+- https://code.claude.com/docs/en/hooks
+- https://code.claude.com/docs/en/commands
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.119
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
 **Total Examples**: 100+ files
 **Categories**: 10 features
 **Hooks**: 8 automation scripts
