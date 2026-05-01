@@ -704,10 +704,10 @@
 
 ### Q4
 - **Category**: practical
-- **Question**: How do you toggle extended thinking visibility during a session?
-- **Options**: A) Type `/effort max` | B) Press `Option+T` (macOS) or `Alt+T` | C) Include "ultrathink" in prompt | D) It's always visible and cannot be toggled
+- **Question**: How do you toggle extended thinking on or off during a session?
+- **Options**: A) Type `/effort max` | B) Press `Option+T` (macOS) or `Alt+T` | C) Include "ultrathink" in prompt | D) It's always enabled and cannot be toggled
 - **Correct**: B
-- **Explanation**: Option+T (macOS) or Alt+T toggles extended thinking visibility. For one-off deep reasoning, include "ultrathink" in your prompt; for session-level control, use `/effort` command.
+- **Explanation**: Option+T (macOS) or Alt+T toggles extended thinking on/off for the session. (`Ctrl+O` toggles verbose mode to show/hide the reasoning text.) For one-off deep reasoning, include "ultrathink" in your prompt; for session-level control, use `/effort` command.
 - **Review**: Extended Thinking section
 
 ### Q5
